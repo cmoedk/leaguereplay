@@ -5,12 +5,15 @@
   "main": "index.js",
   "dependencies": {
     "absurd": "*",
-    "browserify" : "*"
+    "browserify" : "*",
+    "uglify-js" : "*"
   },
   "scripts": {
-    "build-js": "browserify --entry ./src/index.js --outfile ./build/js/leaguereplay.js --debug",
+    "build-js-debug": "browserify --entry ./src/index.js --outfile ./build/js/leaguereplay.js --debug",
+    "build-js": "browserify ./src/index.js | uglifyjs > ./build/js/leaguereplay.js",
     "build-css": "absurd -s ./src/styles/index.js -o ./build/css/leaguereplay.css",
-    "build" : "npm run build-js && npm run build-css"
+    "build" : "npm run build-js-debug && npm run build-css",
+    "build-final" : "npm run build-js && npm run build-css"
   },
   "repository": {
     "type": "git",

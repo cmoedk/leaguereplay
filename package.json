@@ -1,0 +1,32 @@
+{
+  "name": "leaguereplay",
+  "version": "0.2.0",
+  "description": "An interactive table and fixture replay engine, with optional links to video replays.",
+  "main": "index.js",
+  "dependencies": {
+    "absurd": "*",
+    "browserify" : "*"
+  },
+  "scripts": {
+    "build-js": "browserify --entry ./src/index.js --outfile ./build/js/leaguereplay.js --debug",
+    "build-css": "absurd -s ./src/styles/index.js -o ./build/css/leaguereplay.css",
+    "build" : "npm run build-js && npm run build-css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmoedk/leaguereplay.git"
+  },
+  "keywords": [
+    "league",
+    "replay",
+    "soccer",
+    "video"
+  ],
+  "author": "Christian Moe",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cmoedk/leaguereplay/issues"
+  },
+  "homepage": "https://github.com/cmoedk/leaguereplay#readme"
+
+}

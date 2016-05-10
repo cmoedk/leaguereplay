@@ -24,6 +24,16 @@
 CHANGELOG
 =========
 
+### 0.2.2 ###
+
+#### Added ####
+- (Issue #1) Ability to follow a single team (https://github.com/joelchoo)
+
+### 0.2.1 ###
+
+#### Changed ####
+- Applied new style from https://www.reddit.com/user/ggitaliano
+
 ### 0.2.0 ###
 
 #### Changed ####
@@ -31,14 +41,8 @@ CHANGELOG
 - Refactored css to Absurdjs
 
 
-### 0.2.1 ###
 
-#### Changed ####
-- Applied new style from https://www.reddit.com/user/ggitaliano
 
-### 0.2.2 ###
 
-#### Added ####
-- (Issue #1) Ability to follow a single team (https://github.com/joelchoo)
 
 

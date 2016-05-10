@@ -1,10 +1,10 @@
 module.exports = {
     "id": {
-        fixtures: "fixtures",
-        container: "container",
-        structure: "structure",
-        centerDiv: "centerdiv",
-        stats: "stats"
+        FIXTURES: "fixtures",
+        CONTAINER: "container",
+        STRUCTURE: "structure",
+        CENTER_DIV: "centerdiv",
+        STATS: "stats"
     },
     "class" : {
         DATE: 'date',

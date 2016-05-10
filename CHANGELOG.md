@@ -23,6 +23,16 @@
      
 CHANGELOG
 =========
+### 0.3.1 ###
+
+#### Added ####
+- Added documentation
+
+#### Changed ####
+- Moved constants to settings file
+- Match select highlights until match starts
+- Scores init faster
+- A little faster event queue by default
 
 ### 0.3.0 ###
 

@@ -1,8 +1,7 @@
 module.exports = Round;
 
-require('../mixins/jQuery.EventEmitter.js');
-
 var config = require('../config.js');
+var settings = require('../settings.js');
 var util = require('../util.js');
 
 var View = require('../views/View.js');
@@ -12,27 +11,65 @@ var VideoView = require('../views/VideoView.js');
 var TableView = require('../views/TableView.js');
 
 var Match = require('./Match.js');
-var Event = require('./Event.js');
 
-function Round(round) {
-    this.data = round;
+/**
+ * A round is a self-contained structure with winners or qualifiers
+ * @param {object} roundData - Round data from the json database
+ * @constructor
+ */
+function Round(roundData) {
+    /**
+     * Round data from the json database
+     * @type {Object}
+     */
+    this.data = roundData;
+    /**
+     * Array of all matches in chronological order
+     * @type {Array.<Match>}
+     */
     this.matches = [];
+    /**
+     * Index of the match currently processing
+     * @type {number}
+     */
     this.currentMatch = -1;
+    /**
+     * Id of teams already added to the structure table
+     * @type {Array.<number>}
+     */
     this.addedTeams = [];
+    /**
+     * Id of dates already added to the fixtures table
+     * @type {Array.<number>}
+     */
     this.addedDates = [];
-
+    /**
+     * Goalscorers are stored here. Each goalscorer name is used as a key
+     * @type {object}
+     */
     this.goalscorers = {};
-
+    /**
+     * Contains a clone of untouched stats, when updating league table with single goal events
+     * @type {{home: jQuery, away: jQuery}}
+     */
     this.oldStats = {
-        home: 0,
-        away:0
+        home: null,
+        away: null
     };
-
+    /**
+     * The html id attribute of this round/section
+     */
     this.structureId =  this.data.type + this.data.dbid;
-
-    //TODO switch with config values
-    this.$fixtures = $('#fixtures');
-    this.$structure = $('#structure');
+    /**
+     * Reference to fixtures div
+     * @type {jQuery}
+     */
+    this.$fixtures = $('#' + config.id.FIXTURES);
+    /**
+     * Reference to structures div
+     * @type {jQuery}
+     */
+    this.$structure = $('#' + config.id.STRUCTURE);
 
     //Sort the fixtures by start date
     this.data.fixtures.sort(function(a,b) {
@@ -46,17 +83,29 @@ function Round(round) {
         return 0;
     });
 
+    //Populate the matches array
     for(var i = 0; i < this.data.fixtures.length; i++) {
         this.matches.push(new Match(this.data.fixtures[i]))
     }
 }
-
-jQuery.extend(Round.prototype, jQuery.eventEmitter);
-
-
+/**
+ * Renders the round html to dom
+ */
 Round.prototype.render = function() {
+    /**
+     * Contains the views of this round
+     * @type {View}
+     */
     var view = null;
+    /**
+     * HTML string of all fixture table rows
+     * @type {string}
+     */
     var fixtures = '';
+    /**
+     * HTML string of all structure rows
+     * @type {string}
+     */
     var structure = '';
 
     switch(this.data.type) {
@@ -74,7 +123,7 @@ Round.prototype.render = function() {
                 new TableView({
                     id: "topScorers",
                     title: "Top Scorers",
-                    parent: config.id.stats,
+                    parent: config.id.STATS,
                     header: {
                         'tr' : [
                             {'th' : "Name"},
@@ -98,7 +147,6 @@ Round.prototype.render = function() {
         this.$structure.find('#' + this.structureId).find('tbody').append(structure);
 
         util.sortTable($('#' + this.structureId).find('table'), config.LEAGUE_SORTORDER);
-
     } else {
         console.log("Error: no views");
     }
@@ -111,8 +159,16 @@ Round.prototype.render = function() {
  * @return {string} Html for the fixture
  */
 Round.prototype.fixtureHTML = function(match) {
+    var fixture = '';
     var date = util.formatDate(match.start);
-    var fixture = '<tr id="' + util.matchId(match.dbid) + '">' +
+
+    //Create a date row, if none exist
+    if($.inArray(date.id, this.addedDates) === -1) {
+        fixture += '<tr><td id="' + date.id + '" class="' + config.class.DATE + '" colspan = 3>' + date.text + '</td></tr>';
+        this.addedDates.push(date.id);
+    }
+
+    fixture += '<tr id="' + util.matchId(match.dbid) + '">' +
         '<td class="hometeam">' +
         '<a href="#" class="' + config.class.FOLLOW_TEAM + ' ' + util.teamClass(match.homeTeam.dbid) + '" data-id="' + match.homeTeam.dbid + '"> ' +
         match.homeTeam.name + '</a><p class="homescorers"></p></td>' +
@@ -122,11 +178,6 @@ Round.prototype.fixtureHTML = function(match) {
         match.awayTeam.name + '<p class="awayscorers"></p></td></tr>';
 
 
-    //Create a date row, if none exist
-    if($.inArray(date.id, this.addedDates) === -1) {
-        fixture = '<tr><td id="' + date.id + '" class="' + config.class.DATE + '" colspan = 3>' + date.text + '</td></tr>' + fixture;
-        this.addedDates.push(date.id);
-    }
     return fixture;
 };
 
@@ -138,6 +189,7 @@ Round.prototype.fixtureHTML = function(match) {
 Round.prototype.leagueHTML = function(match) {
     var row = '';
 
+    //Each match has two teams. Check both teams, if they are added to the league table
     if($.inArray(match.homeTeam.dbid, this.addedTeams) === -1) {
         row += tableRow(match.homeTeam);
         this.addedTeams.push(match.homeTeam.dbid);
@@ -158,6 +210,11 @@ Round.prototype.leagueHTML = function(match) {
     }
 };
 
+/**
+ * Returns the next match in queue
+ * @returns {Match | boolean}
+ * TODO find more elegant way to end round
+ */
 Round.prototype.nextMatch = function() {
     this.currentMatch++;
 
@@ -170,13 +227,14 @@ Round.prototype.nextMatch = function() {
 
 /**
  * Uses the event or match for updating the table
- * @param event - Event or match with homeGoals and awayGoals
+ * @param {Match | object} event - Event or match with homeGoals and awayGoals
+ * @param {boolean} followMatch - Whether this match is marked as followed
   */
 Round.prototype.update = function(event, followMatch) {
+    //Convert Match to raw data
     if(event.data) {
         event = event.data;
     }
-
 
     var $hometeam = $('#' + event.homeTeam.dbid);
     var $awayteam = $('#' + event.awayTeam.dbid);
@@ -254,9 +312,10 @@ Round.prototype.update = function(event, followMatch) {
 /**
  * Adds a player to the topscorer list, or appends to his total goals.
  * Sorts the topscorer list
- * @param player
+ * @param {object} player - Player that scored
  */
 Round.prototype.addScorer = function(player) {
+    //TODO stats should be handled more generally.
     var $topscorers = $('#topScorers');
 
     //Create a new scorer entry, if it doesn't exist
@@ -281,8 +340,7 @@ Round.prototype.addScorer = function(player) {
 
     setTimeout(function() {
         playerRow.removeClass('highlight');
-    }, 3000)
-
+    }, settings.PLAYER_HIGHLIGHT_DURATION);
 };
 
 

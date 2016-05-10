@@ -6,7 +6,7 @@ var TableView = require('./TableView.js');
 function LeagueView(options) {
     TableView.call(this, options);
 
-    this.parent = config.id.structure;
+    this.parent = config.id.STRUCTURE;
 
     this.addHeader({
         'tr' : [

@@ -4,7 +4,7 @@ var TableView = require('./TableView.js');
 var config = require('../config.js');
 
 function FixtureView(options) {
-    options.parent = config.id.fixtures;
+    options.parent = config.id.FIXTURES;
     TableView.call(this, options);
 }
 

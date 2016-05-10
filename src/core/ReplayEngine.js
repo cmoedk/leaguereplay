@@ -21,6 +21,8 @@ function ReplayEngine(databaseUrl) {
 
     this.resumeEvent = null;
 
+    this.teamFollowing = "All Teams";
+
     /**
      * Sorts league table by pts, goal difference, goals for and name
      * Used by tablesorter plugin
@@ -72,6 +74,7 @@ ReplayEngine.prototype.init = function() {
         var match = this.data[i];
         drawFixture(match);
         addTeamsToLeagueTable(match);
+        addTeamsToDropdownMenu(match);
     }
 
     //If the user request a specific match, simulate the table up to that match
@@ -93,6 +96,18 @@ ReplayEngine.prototype.init = function() {
 
     //Sort the table before starting
     this.sortLeagueTable();
+
+    //Sort the drop down list and prepend the All Teams option
+    $("#selectTeamDropdown").html($("#selectTeamDropdown option").sort(function (a, b) {
+        return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+    }));
+
+    $("#selectTeamDropdown").prepend("<option selected>All Teams</option>");
+
+    //Set event handler when drop down list has changes
+    $("#selectTeamDropdown").change(function() {
+        _this.teamFollowing = $(this).find("option:selected").text();
+    });
 
     //Set the start buttons interactions
     $('#start').one('click', function() {
@@ -158,6 +173,42 @@ ReplayEngine.prototype.init = function() {
         if(_this.leagueTableBody.find('#' + awayTeamId).length === 0) {
             _this.leagueTableBody.append('<tr id="' + awayTeamId + '"><td>' + match.awayTeam.name + '</td><td class="gp">0</td><td class="w">0</td><td class="d">0</td>' +
                 '<td class="l">0</td><td class="gf">0</td><td class="ga">0</td><td class="gd">0</td><td class="pts">0</td></tr>');
+        }
+    }
+
+    /**
+     * Adds teams to the drop down menu to select to follow a team
+     * @param match
+     */
+    function addTeamsToDropdownMenu(match) {
+        var homeTeamId = match.homeTeam.dbid;
+        var awayTeamId = match.awayTeam.dbid;
+
+        var dropdownList = document.getElementById('selectTeamDropdown').options;
+
+        var homeTeamExists = false;
+        var awayTeamExists = false;
+
+        for (var j = 0; j < dropdownList.length; j++) {
+            if (dropdownList[j].value == match.homeTeam.dbid) {
+                homeTeamExists = true;
+                break;
+            }
+        }
+        
+        for (var j = 0; j < dropdownList.length; j++) {
+            if (dropdownList[j].value == match.awayTeam.dbid) {
+                awayTeamExists = true;
+                break;
+            }
+        }
+
+        if (!homeTeamExists) {
+            $("#selectTeamDropdown").append("<option value=\"" + homeTeamId + "\">" + match.homeTeam.name + "</option>");
+        }
+
+        if (!awayTeamExists) {
+            $("#selectTeamDropdown").append("<option value=\"" + awayTeamId + "\">" + match.awayTeam.name + "</option>");
         }
     }
 };
@@ -513,6 +564,11 @@ ReplayEngine.prototype.goal = function(event) {
 ReplayEngine.prototype.processMatch = function(match) {
     this.match = match;
     this.$match =  $('#' + this.match.dbid);
+
+    if (this.teamFollowing != "All Teams" && match.homeTeam.name != this.teamFollowing && match.awayTeam.name != this.teamFollowing) {
+        this.updateTable(match, true);
+        return;
+    }
 
     this.addEvent(this.highlightMatch);
     this.addEvent(this.initScore);

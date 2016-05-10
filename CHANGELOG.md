@@ -23,6 +23,11 @@
      
 CHANGELOG
 =========
+### 0.3.2 ###
+
+#### Changed ####
+- Changed giant to zippy in gfycat links
+
 ### 0.3.1 ###
 
 #### Added ####

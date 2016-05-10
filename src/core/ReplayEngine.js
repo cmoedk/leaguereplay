@@ -248,6 +248,8 @@ ReplayEngine.prototype.goal = function(event, followMatch) {
                 highlight = event.highlights[index];
             }
 
+            highlight.replace('giant', 'zippy');
+
             _this.lastHighlight = highlight;
 
             if(event.highlights.length > 0) {
@@ -263,7 +265,7 @@ ReplayEngine.prototype.goal = function(event, followMatch) {
                     .one('error', function() {
                         //Try a different url if the first is not working
                         console.log("error loading " + $(this).prop('src') + '. Trying fat.');
-                        highlight = $(this).prop('src').replace('giant.', 'fat.');
+                        highlight = $(this).prop('src').replace('zippy.', 'fat.');
                         $('video')
                             .off('error')
                             .one('error', function() {

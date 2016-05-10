@@ -188,9 +188,11 @@ ReplayEngine.prototype.init = function() {
 
         var homeTeamExists = false;
         var awayTeamExists = false;
+        console.log("IN")
 
         for (var j = 0; j < dropdownList.length; j++) {
             if (dropdownList[j].value == match.homeTeam.dbid) {
+
                 homeTeamExists = true;
                 break;
             }

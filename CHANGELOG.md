@@ -36,4 +36,9 @@ CHANGELOG
 #### Changed ####
 - Applied new style from https://www.reddit.com/user/ggitaliano
 
+### 0.2.2 ###
+
+#### Added ####
+- (Issue #1) Ability to follow a single team (https://github.com/joelchoo)
+
 

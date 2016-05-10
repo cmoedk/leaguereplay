@@ -8,8 +8,6 @@ var VideoView = require('./views/VideoView.js');
 var TableView = require('./views/TableView.js');
 
 
-
-
 $(document).on('ready', function() {
     new LeagueView({
         title: "Premier League 2015/2016",
@@ -40,18 +38,3 @@ $(document).on('ready', function() {
 
 });
 
-
-/**
- * <div id="topscorers">
- <h1>Top Goal Scorers</h1>
- <table id="topscorertable" class="tablesorter">
- <thead>
- <tr>
- <th>Name</th>
- <th>Goals</th>
- </tr>
- </thead>
- <tbody></tbody>
- </table>
- </div>
- **/

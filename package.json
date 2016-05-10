@@ -1,6 +1,6 @@
 {
   "name": "leaguereplay",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "An interactive table and fixture replay engine, with optional links to video replays.",
   "main": "index.js",
   "dependencies": {

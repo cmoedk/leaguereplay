@@ -248,7 +248,10 @@ ReplayEngine.prototype.goal = function(event, followMatch) {
                 highlight = event.highlights[index];
             }
 
-            highlight.replace('giant', 'zippy');
+            if(highlight) {
+                highlight.replace('giant', 'zippy');
+            }
+
 
             _this.lastHighlight = highlight;
 

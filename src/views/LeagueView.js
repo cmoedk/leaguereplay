@@ -21,8 +21,6 @@ function LeagueView(options) {
             {'th' : "PTS"}
         ]
     });
-
-    this.render();
 }
 
 LeagueView.prototype = Object.create(TableView.prototype);

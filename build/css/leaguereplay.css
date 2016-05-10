@@ -20,7 +20,7 @@ body {
 body, button {
   font-family: "Lato", "Open Sans", "Roboto", Arial, "Lucida Grande", sans-serif;
 }
-body, #fixtures .highlight td {
+body, a, #fixtures .highlight td {
   color: #33333f;
 }
 blockquote, q {
@@ -29,6 +29,9 @@ blockquote, q {
 blockquote:before, blockquote:after, q:before, q:after {
   content: "";
   content: none;
+}
+a {
+  text-decoration: none;
 }
 ol, ul {
   list-style: none;
@@ -46,6 +49,15 @@ video {
 * {
   box-sizing: border-box;
 }
+a:hover {
+  text-decoration: underline;
+}
+a.followed {
+  color: red;
+}
+a.followed, button, table th, #header h2, #container >div h1, .highlight, #fixtures table td:nth-of-type(2), #fixtures table .date, #fixtures .highlight td {
+  font-weight: bold;
+}
 button {
   width: 95%;
   background-color: #35c06e;
@@ -56,9 +68,6 @@ button {
 button, button:hover, #header h2 {
   color: #fff;
 }
-button, table th, #header h2, #container >div h1, .highlight, #fixtures table td:nth-of-type(2), #fixtures table .date, #fixtures .highlight td {
-  font-weight: bold;
-}
 button, #fixtures .homescorers, #fixtures .awayscorers {
   margin-bottom: 10px;
 }
@@ -68,7 +77,7 @@ button, #header >* {
 button, table td {
   vertical-align: middle;
 }
-button:hover {
+button:hover, table td.match-select:hover {
   background-color: #39ca74;
   cursor: pointer;
 }
@@ -94,6 +103,9 @@ table td {
   text-align: center;
   min-width: 20px;
   padding: 10px 0;
+}
+table td.match-selected {
+  background-color: #39ca74 !important;
 }
 #header {
   background-color: #262934;

@@ -24,6 +24,15 @@
 CHANGELOG
 =========
 
+### 0.3.0 ###
+
+#### Changed ####
+- Ability to follow a single or multiple teams using team names as selector
+- Refactored ReplayEngine (Issue #15)
+- Ability to jump forward in time, and sim games quickly up until that point.
+- Hide the result, until the video has played halfway through (usually where the goal is scored)(Issue #8)
+
+
 ### 0.2.2 ###
 
 #### Added ####

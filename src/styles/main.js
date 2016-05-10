@@ -26,6 +26,19 @@ module.exports = function(api) {
             height : "100%",
             width : "100%"
         },
+        a: {
+            textDecoration: "none",
+            color: colors.darkText,
+            ':hover' : {
+                textDecoration: "underline"
+            }
+
+        },
+        'a.followed' : {
+            color: "red",
+            fontWeight: "bold"
+
+        },
         body: {
             height : "100%",
             width : "100%",
@@ -77,6 +90,15 @@ module.exports = function(api) {
                 minWidth: "20px",
                 padding: "10px 0",
                 fontSize: "0.7vw"
+            },
+            'td.match-select': {
+                ':hover': {
+                    backgroundColor: colors.button.hover,
+                    cursor: "pointer"
+                }
+            },
+            'td.match-selected' : {
+                backgroundColor: colors.button.hover + ' !important'
             }
         },
         video :{

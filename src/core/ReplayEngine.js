@@ -236,26 +236,18 @@ ReplayEngine.prototype.goal = function(event, followMatch) {
         if(followMatch) {
             //Handle goal highlights
             var index = 0;
-            var highlight = event.highlights[index];
+            var highlights = event.highlights;
 
-            //Check if this highlight has been shown before, to avoid duplicate highlights
-            while(highlight === _this.lastHighlight) {
-                index++;
-                if(!event.highlights[index]) {
-                    break;
+            if(typeof highlights !== 'string') {
+                if(highlights.length !== 0 && highlights[0]['gfylink']) {
+                    highlights = event.highlights[0]['gfylink']
+                } else {
+                    highlights = '';
                 }
-
-                highlight = event.highlights[index];
             }
 
-            if(highlight) {
-                highlight.replace('giant', 'zippy');
-            }
-
-
-            _this.lastHighlight = highlight;
-
-            if(event.highlights.length > 0) {
+            if(highlights !== '') {
+                var highlight = 'https://giant.gfycat.com/' + highlights + '.mp4';
                 $('video')
                     .one('ended', function() {
                         render();
@@ -268,7 +260,7 @@ ReplayEngine.prototype.goal = function(event, followMatch) {
                     .one('error', function() {
                         //Try a different url if the first is not working
                         console.log("error loading " + $(this).prop('src') + '. Trying fat.');
-                        highlight = $(this).prop('src').replace('zippy.', 'fat.');
+                        highlight = $(this).prop('src').replace('giant.', 'fat.');
                         $('video')
                             .off('error')
                             .one('error', function() {

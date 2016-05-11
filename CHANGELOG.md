@@ -23,6 +23,12 @@
      
 CHANGELOG
 =========
+### 0.3.3 ###
+
+#### Changed ####
+- Changed zippy back to giant in gfycat links
+- Modified temporary database file to be smaller and more accurate
+
 ### 0.3.2 ###
 
 #### Changed ####

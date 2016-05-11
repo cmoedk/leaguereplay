@@ -6,6 +6,7 @@ build/matches.json
 *.iml
 out
 gen
+db/*
 
 ### Windows template
 # Windows image file caches
